@@ -62,21 +62,24 @@ public class MoveCraftListener extends CustomEventListener {
             // craft.getLocation());
 
             Hashtable<BlockLocation, Cannon> cannons = plugin.getCannons();
-            Hashtable<BlockLocation, Cannon> movedCannons = new Hashtable<BlockLocation, Cannon>();
-            synchronized (cannons) {
-                Iterator<Entry<BlockLocation, Cannon>> iCannons = cannons.entrySet().iterator();
-                while (iCannons.hasNext()) {
-                    Entry<BlockLocation, Cannon> e = iCannons.next();
-                    Cannon cannon = e.getValue();
-                    BlockLocation loc = e.getKey();
-                    if (craft.isIn(loc.getX(), loc.getY(), loc.getZ())) {
-                        iCannons.remove();
-                        // plugin.log("moved cannon at " + loc);
-                        movedCannons.put(loc.move(move), cannon);
-                    }
-                }
+            if(cannons != null)
+            {
+                    Hashtable<BlockLocation, Cannon> movedCannons = new Hashtable<BlockLocation, Cannon>();
+                    synchronized (cannons) {
+                        Iterator<Entry<BlockLocation, Cannon>> iCannons = cannons.entrySet().iterator();
+                        while (iCannons.hasNext()) {
+                            Entry<BlockLocation, Cannon> e = iCannons.next();
+                            Cannon cannon = e.getValue();
+                            BlockLocation loc = e.getKey();
+                            if (craft.isIn(loc.getX(), loc.getY(), loc.getZ())) {
+                                iCannons.remove();
+                                // plugin.log("moved cannon at " + loc);
+                                movedCannons.put(loc.move(move), cannon);
+                            }
+                        }
 
-                cannons.putAll(movedCannons);
+                        cannons.putAll(movedCannons);
+                    }
             }
         } else if (event instanceof MoveCraftTurnEvent) {
             MoveCraftTurnEvent te = (MoveCraftTurnEvent) event;
